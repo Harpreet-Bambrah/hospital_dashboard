@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthPro | Hospital Management System</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Medical Blue/Teal Theme */
+            --primary-color: #0284c7; 
+            --primary-hover: #0369a1;
+            --sidebar-bg: linear-gradient(180deg, #082f49 0%, #0c4a6e 100%);
+            --sidebar-hover: rgba(255, 255, 255, 0.1);
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar Styling */
+        #sidebar {
+            min-height: 100vh;
+            background: var(--sidebar-bg);
+            color: #fff;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+            z-index: 1040;
+        }
+        .sidebar-brand {
+            padding: 24px 20px;
+            background: rgba(0, 0, 0, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .sidebar-brand .logo-icon {
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-link {
+            color: #cbd5e1;
+            padding: 14px 24px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-left: 4px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #ffffff;
+            background: var(--sidebar-hover);
+            border-left: 4px solid #38bdf8;
+        }
+        .nav-link i {
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+        
+        /* Dashboard Styling */
+        .top-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+        
+        /* KPI Cards */
+        .kpi-card {
+            border: none;
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .icon-box {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .icon-primary { background: #e0f2fe; color: #0284c7; }
+        .icon-success { background: #dcfce7; color: #16a34a; }
+        .icon-warning { background: #fef3c7; color: #d97706; }
+        .icon-danger { background: #fee2e2; color: #dc2626; }
+        
+        /* Table Styling */
+        .table-card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            background: #ffffff;
+            overflow: hidden;
+        }
+        .table-custom {
+            margin-bottom: 0;
+        }
+        .table-custom thead {
+            background-color: #f8fafc;
+        }
+        .table-custom th {
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            padding: 16px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .table-custom td {
+            vertical-align: middle;
+            color: var(--text-dark);
+            font-size: 0.875rem;
+            padding: 16px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .table-custom tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        .table-custom tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        /* Custom Buttons & Badges */
+        .btn-primary-custom {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .btn-primary-custom:hover {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+            color: #fff;
+        }
+        .badge-custom {
+            padding: 6px 12px;
+            border-radius: 50rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .avatar-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 0.85rem;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid p-0">
+    <div class="row g-0 flex-nowrap">
+        
+        <!-- Sidebar -->
+        <div class="col-auto col-md-3 col-xl-2 px-0 d-none d-md-block" id="sidebar">
+            <div class="sidebar-brand d-flex align-items-center">
+                <i class="bi bi-hospital-fill fs-3 logo-icon me-3"></i>
+                <div>
+                    <h5 class="mb-0 fw-bold tracking-wide text-white">HealthPro</h5>
+                    <small class="text-white-50" style="font-size: 0.75rem; letter-spacing: 1px;">HOSPITAL ADMIN</small>
+                </div>
+            </div>
+            <ul class="nav flex-column mt-4">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active"><i class="bi bi-grid-fill"></i> Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="bi bi-file-medical-fill"></i> Patient Records</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="bi bi-calendar-medical-fill"></i> Appointments</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="bi bi-person-badge-fill"></i> Doctors & Staff</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="bi bi-hospital"></i> Beds & Wards</a>
+                </li>
+                <li class="nav-item mt-5">
+                    <div class="px-4 mb-2 text-uppercase text-white-50" style="font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;">Operations</div>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="bi bi-capsule"></i> Pharmacy Stock</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="bi bi-receipt-cutoff"></i> Billing & Accounts</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col d-flex flex-column h-sm-100" style="height: 100vh; overflow-y: auto;">
+            
+            <!-- Top Navbar -->
+            <header class="top-navbar d-flex justify-content-between align-items-center shadow-sm">
+                <div class="d-flex align-items-center">
+                    <h4 class="mb-0 fw-bold text-dark d-none d-sm-block">Hospital Command Center</h4>
+                    <h5 class="mb-0 fw-bold text-dark d-block d-sm-none">HealthPro</h5>
+                </div>
+                <div class="d-flex align-items-center gap-4">
+                    <button class="btn btn-outline-danger btn-sm fw-medium rounded-pill px-3" onclick="resetDemo()">
+                        <i class="bi bi-arrow-counterclockwise"></i> Reset Demo
+                    </button>
+                    <div class="d-flex align-items-center gap-3 border-start ps-4">
+                        <div class="text-end d-none d-md-block">
+                            <div class="fw-semibold text-dark" style="font-size: 0.9rem;">Dr. Administrator</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Super Admin</div>
+                        </div>
+                        <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center shadow-sm" style="width: 40px; height: 40px; font-weight: bold; font-size: 1.1rem; background: linear-gradient(135deg, #38bdf8, #0284c7) !important;">
+                            DA
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <main class="p-4 p-md-5 flex-grow-1">
+                
+                <!-- KPI Cards Row -->
+                <div class="row g-4 mb-5">
+                    <div class="col-12 col-sm-6 col-xxl-3">
+                        <div class="kpi-card p-4 d-flex flex-row align-items-center">
+                            <div class="icon-box icon-primary me-4">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted mb-1 fw-medium" style="font-size: 0.85rem;">Active Admissions</h6>
+                                <h3 class="mb-0 fw-bold text-dark" id="kpi-admitted">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xxl-3">
+                        <div class="kpi-card p-4 d-flex flex-row align-items-center">
+                            <div class="icon-box icon-success me-4">
+                                <i class="bi bi-hospital-bed"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted mb-1 fw-medium" style="font-size: 0.85rem;">Available Beds</h6>
+                                <h3 class="mb-0 fw-bold text-dark" id="kpi-beds">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xxl-3">
+                        <div class="kpi-card p-4 d-flex flex-row align-items-center">
+                            <div class="icon-box icon-danger me-4">
+                                <i class="bi bi-heart-pulse-fill"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted mb-1 fw-medium" style="font-size: 0.85rem;">Critical Cases (ICU/ER)</h6>
+                                <h3 class="mb-0 fw-bold text-dark" id="kpi-critical">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xxl-3">
+                        <div class="kpi-card p-4 d-flex flex-row align-items-center">
+                            <div class="icon-box icon-warning me-4">
+                                <i class="bi bi-door-open-fill"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted mb-1 fw-medium" style="font-size: 0.85rem;">Recently Discharged</h6>
+                                <h3 class="mb-0 fw-bold text-dark" id="kpi-discharged">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Table Section -->
+                <div class="table-card">
+                    <div class="bg-white border-bottom p-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                        <div>
+                            <h5 class="mb-1 fw-bold text-dark">Patient Directory & Active Admissions</h5>
+                            <p class="text-muted mb-0" style="font-size: 0.85rem;">Manage in-patients, bed allocations, and current medical statuses.</p>
+                        </div>
+                        <button class="btn btn-primary-custom shadow-sm" data-bs-toggle="modal" data-bs-target="#addPatientModal">
+                            <i class="bi bi-plus-circle me-2"></i> Admit Patient
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-custom w-100">
+                            <thead>
+                                <tr>
+                                    <th class="ps-4">Patient Details</th>
+                                    <th>Patient ID</th>
+                                    <th>Ward & Bed</th>
+                                    <th>Assigned Doctor</th>
+                                    <th>Admission Date</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-end pe-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="patientTableBody">
+                                <!-- Populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+</div>
+
+<!-- Admit Patient Modal -->
+<div class="modal fade" id="addPatientModal" tabindex="-1" aria-labelledby="addPatientModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+            <div class="modal-header border-bottom p-4">
+                <h5 class="modal-title fw-bold text-dark" id="addPatientModalLabel">Admit New Patient</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="addPatientForm">
+                    <div class="row mb-4">
+                        <div class="col-md-7">
+                            <label class="form-label fw-semibold text-muted" style="font-size: 0.85rem;">Full Name</label>
+                            <input type="text" class="form-control" id="patName" required placeholder="e.g. Gurpreet Singh">
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label fw-semibold text-muted" style="font-size: 0.85rem;">Patient ID</label>
+                            <input type="text" class="form-control" id="patId" required placeholder="e.g. PID-2023">
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted" style="font-size: 0.85rem;">Age / Gender</label>
+                            <input type="text" class="form-control" id="patDemographics" required placeholder="e.g. 45 / Male">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted" style="font-size: 0.85rem;">Assigned Doctor</label>
+                            <input type="text" class="form-control" id="patDoctor" required placeholder="e.g. Dr. Anil Sharma">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted" style="font-size: 0.85rem;">Ward & Bed</label>
+                            <select class="form-select" id="patWard" required>
+                                <option value="General Ward - Bed Unassigned">General Ward</option>
+                                <option value="ICU - Bed Unassigned">Intensive Care Unit (ICU)</option>
+                                <option value="Emergency - Bed Unassigned">Emergency (ER)</option>
+                                <option value="Orthopedic - Bed Unassigned">Orthopedic</option>
+                                <option value="Maternity - Bed Unassigned">Maternity</option>
+                                <option value="Pediatrics - Bed Unassigned">Pediatrics</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted" style="font-size: 0.85rem;">Initial Status</label>
+                            <select class="form-select" id="patStatus" required>
+                                <option value="Stable">Stable</option>
+                                <option value="Critical">Critical</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-top p-4 bg-light" style="border-radius: 0 0 16px 16px;">
+                <button type="button" class="btn btn-light fw-medium px-4" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary-custom" onclick="saveNewPatient()">Admit Patient</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Main Application Logic -->
+<script>
+    // Total hospital capacity configuration
+    const TOTAL_HOSPITAL_BEDS = 150;
+
+    // 10 Professional Medical Demo Entries
+    const initialDemoData = [
+        { id: 'PID-8921', name: 'Rajesh Sharma', info: '52 / Male', doctor: 'Dr. Anil Kumar (Cardiology)', ward: 'ICU - Bed 04', date: '08 Nov 2026', status: 'Critical', color: '#ef4444' },
+        { id: 'PID-8922', name: 'Harpreet Kaur', info: '34 / Female', doctor: 'Dr. Meena Iyer (Gynae)', ward: 'Maternity - Bed 12', date: '08 Nov 2026', status: 'Stable', color: '#ec4899' },
+        { id: 'PID-8923', name: 'Amit Singh', info: '28 / Male', doctor: 'Dr. R.K. Mehta (Ortho)', ward: 'Orthopedic - Bed 05', date: '07 Nov 2026', status: 'Stable', color: '#3b82f6' },
+        { id: 'PID-8924', name: 'Sunita Verma', info: '61 / Female', doctor: 'Dr. S. Khanna (Neurology)', ward: 'General Ward - Bed 42', date: '05 Nov 2026', status: 'Discharged', color: '#10b981' },
+        { id: 'PID-8925', name: 'Vikram Malhotra', info: '45 / Male', doctor: 'Dr. P. Joshi (ER)', ward: 'Emergency - Bed 01', date: '09 Nov 2026', status: 'Critical', color: '#f59e0b' },
+        { id: 'PID-8926', name: 'Priya Patel', info: '22 / Female', doctor: 'Dr. V. Gupta (Gen. Med)', ward: 'General Ward - Bed 18', date: '06 Nov 2026', status: 'Stable', color: '#8b5cf6' },
+        { id: 'PID-8927', name: 'Master Aarav', info: '08 / Male', doctor: 'Dr. Neha Singh (Pediatrics)', ward: 'Pediatrics - Bed 03', date: '07 Nov 2026', status: 'Stable', color: '#14b8a6' },
+        { id: 'PID-8928', name: 'Manoj Tiwari', info: '55 / Male', doctor: 'Dr. Anil Kumar (Cardiology)', ward: 'ICU - Bed 02', date: '09 Nov 2026', status: 'Critical', color: '#f97316' },
+        { id: 'PID-8929', name: 'Jaspreet Sandhu', info: '39 / Male', doctor: 'Dr. R.K. Mehta (Ortho)', ward: 'Orthopedic - Bed 09', date: '04 Nov 2026', status: 'Discharged', color: '#64748b' },
+        { id: 'PID-8930', name: 'Kavita Das', info: '48 / Female', doctor: 'Dr. V. Gupta (Gen. Med)', ward: 'General Ward - Bed 21', date: '08 Nov 2026', status: 'Stable', color: '#3b82f6' }
+    ];
+
+    // Array of colors for generic avatars
+    const avatarColors = ['#0284c7', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#8b5cf6', '#14b8a6', '#f97316'];
+
+    // State Management
+    let patients = JSON.parse(localStorage.getItem('healthpro_hospital_data'));
+    if (!patients || patients.length === 0) {
+        patients = initialDemoData;
+        saveData();
+    }
+
+    function saveData() {
+        localStorage.setItem('healthpro_hospital_data', JSON.stringify(patients));
+    }
+
+    function getInitials(name) {
+        return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    }
+
+    // Dashboard Render Function
+    function renderDashboard() {
+        const tableBody = document.getElementById('patientTableBody');
+        tableBody.innerHTML = '';
+        
+        let admitted = 0, critical = 0, discharged = 0;
+
+        patients.forEach((pat, index) => {
+            // Determine Status
+            let statusBadge = '';
+            if (pat.status === 'Stable') {
+                statusBadge = '<span class="badge badge-custom bg-success bg-opacity-10 text-success border border-success border-opacity-25"><i class="bi bi-check-circle-fill me-1"></i> Stable</span>';
+                admitted++;
+            } else if (pat.status === 'Critical') {
+                statusBadge = '<span class="badge badge-custom bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25"><i class="bi bi-heart-pulse-fill me-1"></i> Critical</span>';
+                admitted++;
+                critical++;
+            } else {
+                statusBadge = '<span class="badge badge-custom bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25"><i class="bi bi-door-open-fill me-1"></i> Discharged</span>';
+                discharged++;
+            }
+
+            // Dim out row if discharged
+            const rowOpacity = pat.status === 'Discharged' ? 'opacity: 0.6;' : '';
+
+            // Create Row
+            const tr = document.createElement('tr');
+            tr.style = rowOpacity;
+            tr.innerHTML = `
+                <td class="ps-4">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar-circle me-3 shadow-sm" style="background-color: ${pat.color || '#0284c7'};">
+                            ${getInitials(pat.name)}
+                        </div>
+                        <div>
+                            <div class="fw-bold text-dark">${pat.name}</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">${pat.info}</div>
+                        </div>
+                    </div>
+                </td>
+                <td class="fw-semibold" style="color: var(--primary-color);">${pat.id}</td>
+                <td><span class="text-muted bg-light px-2 py-1 rounded" style="font-size: 0.8rem;"><i class="bi bi-hospital me-1"></i> ${pat.ward}</span></td>
+                <td class="fw-medium text-dark">${pat.doctor}</td>
+                <td class="text-muted" style="font-size: 0.85rem;"><i class="bi bi-calendar-event me-1"></i> ${pat.date}</td>
+                <td class="text-center">${statusBadge}</td>
+                <td class="text-end pe-4">
+                    <div class="btn-group shadow-sm" role="group">
+                        <button type="button" class="btn btn-light btn-sm text-primary border" onclick="toggleStatus(${index})" title="Update Medical Status"><i class="bi bi-arrow-repeat"></i></button>
+                        <button type="button" class="btn btn-light btn-sm text-danger border" onclick="deletePatient(${index})" title="Remove Record"><i class="bi bi-trash"></i></button>
+                    </div>
+                </td>
+            `;
+            tableBody.appendChild(tr);
+        });
+
+        // Update KPIs
+        document.getElementById('kpi-admitted').textContent = admitted;
+        document.getElementById('kpi-beds').textContent = Math.max(0, TOTAL_HOSPITAL_BEDS - admitted);
+        document.getElementById('kpi-critical').textContent = critical;
+        document.getElementById('kpi-discharged').textContent = discharged;
+    }
+
+    // Add New Patient
+    function saveNewPatient() {
+        const form = document.getElementById('addPatientForm');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        const name = document.getElementById('patName').value;
+        const randomColor = avatarColors[Math.floor(Math.random() * avatarColors.length)];
+        
+        // Format current date
+        const today = new Date();
+        const dateString = today.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+        const newPatient = {
+            id: document.getElementById('patId').value,
+            name: name,
+            info: document.getElementById('patDemographics').value,
+            doctor: document.getElementById('patDoctor').value,
+            ward: document.getElementById('patWard').value,
+            date: dateString,
+            status: document.getElementById('patStatus').value,
+            color: randomColor
+        };
+
+        patients.unshift(newPatient); // Add to beginning of array
+        saveData();
+        renderDashboard();
+        
+        // Hide Modal and Reset Form
+        const modalEl = document.getElementById('addPatientModal');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        modal.hide();
+        form.reset();
+    }
+
+    // Cycle through Status (Stable -> Critical -> Discharged)
+    function toggleStatus(index) {
+        const currentStatus = patients[index].status;
+        if (currentStatus === 'Stable') patients[index].status = 'Critical';
+        else if (currentStatus === 'Critical') patients[index].status = 'Discharged';
+        else patients[index].status = 'Stable';
+        
+        saveData();
+        renderDashboard();
+    }
+
+    // Delete Patient Record
+    function deletePatient(index) {
+        if(confirm(`Are you sure you want to permanently delete the medical record for ${patients[index].name}?`)) {
+            patients.splice(index, 1);
+            saveData();
+            renderDashboard();
+        }
+    }
+
+    // Reset Demo Data
+    function resetDemo() {
+        if(confirm("Erase all current patient data and reload the initial 10 hospital demo records?")) {
+            patients = JSON.parse(JSON.stringify(initialDemoData)); // deep copy
+            saveData();
+            renderDashboard();
+        }
+    }
+
+    // Initialize Dashboard on load
+    document.addEventListener("DOMContentLoaded", renderDashboard);
+</script>
+</body>
+</html>
